@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 import android.os.Parcelable
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
@@ -31,15 +32,16 @@ data class ProfileRecordResponse(
         val version: String // 1.3
     ) : Parcelable
 
-    @Entity(tableName = "profile_record_table")
     @SuppressLint("ParcelCreator")
     @Parcelize
-    data class Result(
+    @Entity(tableName = "profile_record_table")
+    class Result(
+        @PrimaryKey(autoGenerate = true)
+        var uId:Int=0,
 
         @SerializedName("cell")
         var cell: String?=null, // 0178-6000657
-
-        @Ignore
+        @Embedded
         @SerializedName("dob")
         var dob: Dob?=null,
         @SerializedName("email")
@@ -47,15 +49,14 @@ data class ProfileRecordResponse(
         @SerializedName("gender")
         var gender: String?=null, // male
 
-        @Ignore
+        @Embedded
         @SerializedName("id")
         var id: Id?=null,
 
         var isConnect:Boolean=false,
         var isSaved:Boolean=false,
 
-        @PrimaryKey
-        var uId:Int=0,
+
 
         @Ignore
         @SerializedName("location")
@@ -65,16 +66,18 @@ data class ProfileRecordResponse(
         @SerializedName("login")
         var login: Login?=null,
 
-        @Ignore
+        @Embedded
         @SerializedName("name")
         var name: Name?=null,
         @SerializedName("nat")
         var nat: String?=null, // DE
         @SerializedName("phone")
         var phone: String?=null, // 0711-3502149
-        @Ignore
+
+        @Embedded
         @SerializedName("picture")
         var picture: Picture?=null,
+
         @Ignore
         @SerializedName("registered")
         var registered: Registered?=null

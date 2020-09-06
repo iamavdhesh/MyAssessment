@@ -48,11 +48,13 @@ class MyApp : Application(), HasActivityInjector {
 
             override fun onActivityCreated(activity: Activity, p1: Bundle?) {
 //                handleActivity(activity)
-                AndroidInjection.inject(activity)
+//                AndroidInjection.inject(activity)
 
             }
 
             override fun onActivityResumed(activity: Activity) {
+                AndroidInjection.inject(activity)
+
             }
         })
     }

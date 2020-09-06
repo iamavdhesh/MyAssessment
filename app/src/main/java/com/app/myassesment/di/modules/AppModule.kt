@@ -25,7 +25,7 @@ class AppModule {
      * Static variables to hold base url's etc.
      */
     companion object {
-        private const val BASE_URL = "https://randomuser.me"
+        private const val BASE_URL = "https://randomuser.me/"
     }
 
 

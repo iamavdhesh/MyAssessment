@@ -54,7 +54,7 @@ class ProfileRepository @Inject constructor(
             override fun loadFromDb() = profileRecordDao.getProfilesRecords()
 
             override fun createCall() =
-                apiServices.getProfiles()
+                apiServices.getProfiles(20)
 
         }.asLiveData()
     }

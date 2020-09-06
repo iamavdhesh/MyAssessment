@@ -1,34 +1,51 @@
 package com.app.myassesment.view
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.myassesment.*
 import com.app.myassesment.core.BaseActivity
+import com.app.myassesment.model.profile.ProfileRecordResponse
 import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.empty_layout_.*
 import kotlinx.android.synthetic.main.progress_layout_.*
 
 class CardProfilesActivity : BaseActivity<ProfileCardViewModel>() {
 
-    private lateinit var adapter: ProfilesAdapter
+    private lateinit var myProfileAdapter: ProfilesAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        profile_list.setEmptyView(empty_view)
-        profile_list.setProgressView(progress_view)
+        with(profile_list) {
+            setEmptyView(empty_view)
+            setProgressView(progress_view)
 
-        adapter = ProfilesAdapter {
-            toast(it.name.toString())
+
+            myProfileAdapter = ProfilesAdapter()
+            myProfileAdapter.listener= object : ProfilesAdapter.OnItemClickedListener {
+                override fun onItemClicked(
+                    position: Int,
+                    view: View,
+                    result: ProfileRecordResponse.Result
+                ) {
+
+
+                }
+
+            }
+            adapter = myProfileAdapter
+            layoutManager =
+                LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
         }
-        profile_list.adapter = adapter
-        profile_list.layoutManager = LinearLayoutManager(this)
 
+
+    }
+
+    override fun onResume() {
+        super.onResume()
         getProfiles()
-
 
     }
 
@@ -37,7 +54,7 @@ class CardProfilesActivity : BaseActivity<ProfileCardViewModel>() {
         /*
         * Observing for data change, Cater DB and Network Both
         * */
-        viewModel?.getProfiles()?.observe(this) {
+        viewModel.getProfiles().observe(this) {
             when {
                 it.status.isLoading() -> {
                     profile_list.showProgressView()
@@ -45,7 +62,7 @@ class CardProfilesActivity : BaseActivity<ProfileCardViewModel>() {
                 it.status.isSuccessful() -> {
                     it.load(profile_list) {
                         // Update the UI as the data has changed
-                        it?.let { adapter.replaceItems(it) }
+                        it?.let { myProfileAdapter.replaceItems(it) }
                     }
                 }
                 it.status.isError() -> {
